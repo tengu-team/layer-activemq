@@ -1,0 +1,36 @@
+options:
+  install-type:
+    type: string
+    default: "full"
+    description: |
+      Type of install to perform. Valid options are 'jre' or 'full'. The
+      default is 'jre', which will install the Java Runtime Environment
+      (JRE). Setting this to 'full' will install the Java Development
+      Kit (JDK) in addition to the JRE.
+  java-major:
+    type: string
+    default: "8"
+    description: |
+      Major version of Java. Defaults to 8. Supported versions are 'Oracle java 8' and 'openjdk 6/7/8'
+  java-flavor:
+    type: string
+    default: "openjdk"
+    description: |
+      Flavor of Java to install. Possible options right now are 'openjdk'
+      and 'oracle'. Default value is 'openjdk'
+  port:
+    type: int
+    default: 61616
+    description: |
+      Port where activeMQ will be running. default set to 61616.
+  admin_panel_enabled:
+    type: boolean
+    default: true
+    description: |
+      Set to True if you want to make the admin panel publicly accessible. Set to
+      False to disable it publicly.
+  brokername:
+    type: string
+    default: 'ActiveMQ standalone'
+    description: |
+      This will change the name of your message broker and will be visible in the admin web console.
