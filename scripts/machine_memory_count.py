@@ -21,7 +21,7 @@ if __name__ == '__main__':
     installed_packages = pip.get_installed_distributions()
     flat_installed_packages = [package.project_name for package in installed_packages]
     if not 'psutil' in flat_installed_packages:
-        subprocess.check_call(['pip', 'install', 'psutil'])
+        subprocess.check_call(['pip', 'install', 'psutil', '-q', '-q', '-q'])
     import psutil
     mem = psutil.virtual_memory()
     result = mem.total
