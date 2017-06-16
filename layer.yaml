@@ -1,1 +1,1 @@
-includes: ['layer:basic', 'layer:java', 'layer:metrics', 'interface:http', 'interface:activemq']  # if you use any interfaces, add them here
+includes: ['layer:basic', 'layer:java', 'layer:metrics', 'interface:http', 'interface:activemq-sub']  # if you use any interfaces, add them here

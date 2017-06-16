@@ -14,5 +14,5 @@ provides:
   http:
     interface: http
   messagebroker:
-    interface: activemq
+    interface: activemq-sub
 series: [ 'xenial' ]

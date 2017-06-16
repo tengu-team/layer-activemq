@@ -34,3 +34,8 @@ options:
     default: 'ActiveMQ standalone'
     description: |
       This will change the name of your message broker and will be visible in the admin web console.
+  version:
+    type: string
+    default: '5.14.5'
+    description: |
+      Version of Activemq that needs to be downloaded. Supported version atm is 5.14.5.

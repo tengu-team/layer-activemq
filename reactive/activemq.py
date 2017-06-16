@@ -28,9 +28,10 @@ def install_layer_activemq():
     activemq_dir = '/opt/apache-activemq'
     if not os.path.isdir(activemq_dir):
         os.mkdir(activemq_dir)
-    subprocess.check_call(['wget', '--output-document={}/apache-activemq-5.14.5-bin.tar.gz'.format(activemq_dir),
-                           'http://www.apache.org/dyn/closer.cgi?filename=/activemq/5.14.5/apache-activemq-5.14.5-bin.tar.gz&action=download'])
-    subprocess.check_call(['tar', 'zxvf', '{}/apache-activemq-5.14.5-bin.tar.gz'.format(activemq_dir), '-C', activemq_dir])
+    version = config()['version']
+    subprocess.check_call(['wget', '--output-document={}/apache-activemq-{}-bin.tar.gz'.format(activemq_dir, version),
+                           'http://www.apache.org/dyn/closer.cgi?filename=/activemq/{}/apache-activemq-{}-bin.tar.gz&action=download'.format(version, version)])
+    subprocess.check_call(['tar', 'zxvf', '{}/apache-activemq-{}-bin.tar.gz'.format(activemq_dir, version), '-C', activemq_dir])
 
     #open and config the right ports
     port_nr = config()['port']
@@ -42,10 +43,10 @@ def install_layer_activemq():
 
     passw = b64encode(os.urandom(16)).decode('utf-8')
     render_user_prop(passw)
-    os.chmod('{}/apache-activemq-5.14.5/bin/activemq'.format(activemq_dir), 0o755)
+    os.chmod('{}/apache-activemq-{}/bin/activemq'.format(activemq_dir, version), 0o755)
 
     # run activeMQ as a daemon process
-    subprocess.check_call(['{}/apache-activemq-5.14.5/bin/activemq'.format(activemq_dir), 'start'])
+    subprocess.check_call(['{}/apache-activemq-{}/bin/activemq'.format(activemq_dir, version), 'start'])
     set_state('activemq.installed')
     status_set('active', 'Ready, ActiveMQ admin interface is running on port 8161 with admin password: {}'.format(passw))
 
@@ -62,15 +63,17 @@ def configure_http(http):
 @when_not('activemq.broker-configured')
 def configure_broker(messagebroker):
     port_nr = config()['port']
-    messagebroker.configure(port_nr)
+    messagebroker.configure(port_nr, config()['version'])
     set_state('activemq.broker-configured')
 
 
 def render_config(port, brokername):
     context = {'port': port, 'brokername':brokername}
-    render('activemq_config.xml', '/opt/apache-activemq/apache-activemq-5.14.5/conf/activemq.xml', context)
+    version = config()['version']
+    render('activemq_config.xml', '/opt/apache-activemq/apache-activemq-{}/conf/activemq.xml'.format(version), context)
 
 
 def render_user_prop(password):
     context = {'password': password}
-    render('jetty-realm.properties', '/opt/apache-activemq/apache-activemq-5.14.5/conf/jetty-realm.properties', context)
+    version = config()['version']
+    render('jetty-realm.properties', '/opt/apache-activemq/apache-activemq-{}/conf/jetty-realm.properties'.format(version), context)
