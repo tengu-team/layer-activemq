@@ -52,19 +52,15 @@ def install_layer_activemq():
 
 
 @when('http.available', 'activemq.installed')
-@when_not('activemq.http-configured')
 def configure_http(http):
     port_nr = config()['port']
     http.configure(port_nr)
-    set_state('activemq.http-configured')
 
 
-@when('messagebroker.available', 'activemq.installed')
-@when_not('activemq.broker-configured')
+@when('messagebroker.available')
 def configure_broker(messagebroker):
     port_nr = config()['port']
     messagebroker.configure(port_nr, config()['version'])
-    set_state('activemq.broker-configured')
 
 
 def render_config(port, brokername):
