@@ -22,7 +22,7 @@ from charms.reactive import when, when_not, set_state
 from charmhelpers.core.hookenv import status_set, config, open_port
 from charmhelpers.core.templating import render
 
-@when('java.installed')
+
 @when_not('activemq.installed')
 def install_layer_activemq():
     activemq_dir = '/opt/apache-activemq'
@@ -34,13 +34,17 @@ def install_layer_activemq():
     subprocess.check_call(['tar', 'zxvf', '{}/apache-activemq-{}-bin.tar.gz'.format(activemq_dir, version), '-C', activemq_dir])
 
     #open and config the right ports
-    port_nr = config()['port']
-    brokername = config()['brokername']
-    open_port(port_nr)
-    render_config(port_nr, brokername)
+    connectors = "<transportConnector name=\"openwire\" uri=\"tcp://0.0.0.0:{}?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600\"/>".format(config()['port'])
+    open_port(config()['port'])
     if config()['admin_panel_enabled']:
         open_port(8161)
-
+    if config()['port_amqp'] > 0:
+        open_port(config()['port_amqp'])
+        connectors += "\n<transportConnector name=\"amqp\" uri=\"amqp://0.0.0.0:{}?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600\"/>".format(config()['port_amqp'])
+    if config()['port_stomp'] > 0:
+        open_port(config()['port_stomp'])
+        connectors += "\n<transportConnector name=\"stomp\" uri=\"stomp://0.0.0.0:{}?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600\"/>".format(config()['port_stomp'])
+    render_config(connectors)
     passw = b64encode(os.urandom(16)).decode('utf-8')
     render_user_prop(passw)
     os.chmod('{}/apache-activemq-{}/bin/activemq'.format(activemq_dir, version), 0o755)
@@ -63,8 +67,8 @@ def configure_broker(messagebroker):
     messagebroker.configure(port_nr, config()['version'])
 
 
-def render_config(port, brokername):
-    context = {'port': port, 'brokername':brokername}
+def render_config(tpc):
+    context = {'transportconnectors': tpc, 'brokername': config()['brokername']}
     version = config()['version']
     render('activemq_config.xml', '/opt/apache-activemq/apache-activemq-{}/conf/activemq.xml'.format(version), context)
 

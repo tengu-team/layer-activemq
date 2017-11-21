@@ -1,23 +1,4 @@
 options:
-  install-type:
-    type: string
-    default: "full"
-    description: |
-      Type of install to perform. Valid options are 'jre' or 'full'. The
-      default is 'jre', which will install the Java Runtime Environment
-      (JRE). Setting this to 'full' will install the Java Development
-      Kit (JDK) in addition to the JRE.
-  java-major:
-    type: string
-    default: "8"
-    description: |
-      Major version of Java. Defaults to 8. Supported versions are 'Oracle java 8' and 'openjdk 6/7/8'
-  java-flavor:
-    type: string
-    default: "openjdk"
-    description: |
-      Flavor of Java to install. Possible options right now are 'openjdk'
-      and 'oracle'. Default value is 'openjdk'
   port:
     type: int
     default: 61616
@@ -39,3 +20,13 @@ options:
     default: '5.14.5'
     description: |
       Version of Activemq that needs to be downloaded. Supported version atm is 5.14.5.
+  port_stomp:
+    type: int
+    default: 61613
+    description: |
+      Enable the STOMP protocol for your activemq messagebroker. Set to 0 to disable stomp.
+  port_amqp:
+    type: int
+    default: 5672
+    description: |
+      Enable the AMQP protocol for your activemq messagebroker.Set to 0 to disable amqp.

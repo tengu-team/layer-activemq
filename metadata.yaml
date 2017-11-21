@@ -1,6 +1,6 @@
 name: activemq
-summary: this layer provides the active
-maintainer: Sebastien <sebastien.pattyn@tengu.io>
+summary: this layer provides the activeMQ service
+maintainer: Sebastien Pattyn <sebastien.pattyn@tengu.io>
 description: |
   Apache ActiveMQ ™ is the most popular and powerful open source messaging and
   Integration Patterns server.Apache ActiveMQ is fast, supports many Cross

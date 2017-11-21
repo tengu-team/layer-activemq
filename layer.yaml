@@ -1,1 +1,6 @@
-includes: ['layer:basic', 'layer:java', 'layer:metrics', 'interface:http', 'interface:activemq-sub']  # if you use any interfaces, add them here
+includes: ['layer:basic', 'layer:metrics', 'interface:http', 'interface:activemq-sub']  # if you use any interfaces, add them here
+repo: git@github.com/tengu-team/interface-activemq.git
+options:
+  basic:
+    packages:
+      - openjdk-8-jre-headless
